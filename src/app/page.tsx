@@ -1,101 +1,104 @@
-import Image from "next/image";
+'use client'
+import { useState } from 'react'
+
+import { BeakerIcon, XCircleIcon } from '@heroicons/react/24/solid'
+import { Feed } from './DashPages/Pages/Feed'
+import { Messenger } from './DashPages/Pages/Messenger'
+import { OptionPageDash } from './DashPages/Pages/OptionPage'
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [openSide, setOpenSide] = useState(false)
+  const [dash, setDash] = useState('feed')
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const handleOpenHelp = () => {
+    setOpenSide(!openSide)
+  }
+
+  const handleChangeDash = (dashOption: string) => {
+    setDash(dashOption)
+  }
+
+  const renderDash = () => {
+    switch (dash) {
+      case 'feed':
+        return <Feed/>;
+      case 'messeger':
+        return <Messenger/>;
+      case 'calendar':
+        return <OptionPageDash optionPageName='calendar'/>;
+      case 'document':
+        return <OptionPageDash optionPageName='document'/>;
+      case 'email':
+        // return <Email />;
+      case 'work':
+        // return <Work />;
+      default:
+        return <Feed />;
+    }
+  };
+
+
+  return (
+    <div className="h-screen w-full bg-gray-300 flex">
+      {/* Barra de ícones fixa */}
+      <div className="h-screen w-10 bg-red-400 flex flex-col items-center gap-5 pt-10 cursor-pointer">
+        <BeakerIcon className="size-6 text-blue-500 hover:text-gray-300" onClick={handleOpenHelp} />
+        <BeakerIcon className="size-6 text-blue-500" />
+        <BeakerIcon className="size-6 text-blue-500" />
+        <BeakerIcon className="size-6 text-blue-500" />
+        <BeakerIcon className="size-6 text-blue-500" />
+        <BeakerIcon className="size-6 text-blue-500" />
+      </div>
+
+      {/* Barra lateral expansível */}
+      <div
+        className={`bg-white h-full fixed top-0 left-0 z-50 transition-all duration-300 ease-in-out ${openSide ? 'w-[800px]' : 'w-0'
+          }`}
+      >
+        {openSide && (
+          <div className="flex items-start">
+            {/* Cabeçalho da barra lateral */}
+            <div className='h-screen bg-gray-300 w-52'>
+              <div className='p-4'>
+                <img src={'https://confirm8.com/dist/img/confirm8-logo.png'} alt='confirm8' className='w-36 cursor-pointer' />
+              </div>
+              {/* essa parte aqui é o header do menu */}
+              <div className='flex flex-col  gap-4 pt-3 w-full'>
+                <ul>
+                  <li className='h-8 cursor-pointer hover:bg-gray-400 flex items-center'><span className='p-4'>Novo</span></li>
+                  <li className='h-8 cursor-pointer hover:bg-gray-400 flex items-center'><span className='p-4'>Como começar?</span></li>
+                </ul>
+              </div>
+              {/* a parte do menu que vai controlar a dashboard */}
+              <div className='pt-10'>
+                <ul>
+                  <li className='h-8 cursor-pointer hover:bg-gray-400 flex items-center' onClick={() => handleChangeDash('feed')}><span className='p-4'>Feed</span></li>
+                  <li className='h-8 cursor-pointer hover:bg-gray-400 flex items-center' onClick={() => handleChangeDash('messeger')}><span className='p-4'>Messenger</span></li>
+                  <li className='h-8 cursor-pointer hover:bg-gray-400 flex items-center' onClick={() => handleChangeDash('calendar')}><span className='p-4'>Calendarios</span></li>
+                  <li className='h-8 cursor-pointer hover:bg-gray-400 flex items-center' onClick={() => handleChangeDash('document')}><span className='p-4'>Documentos</span></li>
+                  <li className='h-8 cursor-pointer hover:bg-gray-400 flex items-center' onClick={() => handleChangeDash('email')}><span className='p-4'>E-mail</span></li>
+                  <li className='h-8 cursor-pointer hover:bg-gray-400 flex items-center' onClick={() => handleChangeDash('work')}><span className='p-4'>Tarefas</span></li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between p-4">
+                <p className="text-lg font-bold">Dash board de ajuda</p>
+                <XCircleIcon className="size-6 text-blue-500 cursor-pointer" onClick={handleOpenHelp} />
+              </div>
+              <div>
+                {renderDash()}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Conteúdo principal */}
+      <div className="flex-grow bg-gray-100 p-8">
+        <h1 className="text-2xl font-bold">Conteúdo Principal da Dashboard</h1>
+      </div>
     </div>
   );
 }
